@@ -11,7 +11,9 @@ def meet_condition(post, start_time):
     """
     if post["create_time"] <= start_time:
         return False
-    if RENT_RANGE and (not post['rent'] or post['rent'] < RENT_RANGE[0] or post['rent'] > RENT_RANGE[1]):
+    if RENT_RANGE and (
+        not post["rent"] or post["rent"] < RENT_RANGE[0] or post["rent"] > RENT_RANGE[1]
+    ):
         return False
     text = f'{post["title"]}\n{post["content"]}'
     for rule in MATCH_RULES:
@@ -30,35 +32,29 @@ def send_msg(text):
     """
     data = channel[NOTIFY["channel"]](text)
     response = requests.post(NOTIFY["url"], json=data)
-    logging.info('通知内容:%s\n返回结果:%s', text, response.text)
+    logging.info("通知内容:%s\n返回结果:%s", text, response.text)
 
 
 channel = {
     "feishu": lambda content: {
         "msg_type": "interactive",
         "card": {
-            "elements": [
-                {
-                    "tag": "div",
-                    "text": {
-                        "tag": "lark_md",
-                        "content": content
-                    }
-                }
-            ]
-        }
+            "elements": [{"tag": "div", "text": {"tag": "lark_md", "content": content}}]
+        },
     },
     "work.weixin": lambda content: {
         "msgtype": "markdown",
-        "markdown": {
-            "content": content
-        }
+        "markdown": {"content": content},
     },
     "dingtalk": lambda content: {
         "msgtype": "markdown",
         "markdown": {
-            "title": re.search(r'\[(.*)\]', content).group(1) if re.search(r'\[(.*)\]', content) else '豆瓣租房',
-            "text": content.replace('\n', '\n\n')
-        }
-    }
+            "title": (
+                re.search(r"\[(.*)\]", content).group(1)
+                if re.search(r"\[(.*)\]", content)
+                else "豆瓣租房"
+            ),
+            "text": content.replace("\n", "\n\n"),
+        },
+    },
 }

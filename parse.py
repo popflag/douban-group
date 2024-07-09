@@ -16,23 +16,22 @@ def parse_list(html):
     for row in rows:
         link = row.select_one('td[class="title"] a')
         time_text = row.select_one('td[class="time"]').get_text()
-        if re.match(r'\d{2}-\d{2} \d{2}:\d{2}', time_text):
+        if re.match(r"\d{2}-\d{2} \d{2}:\d{2}", time_text):
             time_text = str(datetime.now().year) + "-" + time_text
-        elif re.match(r'\d{4}-\d{2}-\d{2}', time_text):
+        elif re.match(r"\d{4}-\d{2}-\d{2}", time_text):
             # 跨年的日期，豆瓣显示的是 年-月-日
-            time_text += ' 00:00'
+            time_text += " 00:00"
         r_count = row.select_one('td[class="r-count"]').get_text()
-        author = row.select_one('td:nth-child(2) a')
-        posts.append({
-            "title": link['title'],
-            "url": link['href'],
-            "reply_count": int(r_count) if r_count else 0,
-            "time": datetime.strptime(time_text, '%Y-%m-%d %H:%M'),
-            "author": {
-                "name": author.get_text(),
-                "url": author['href']
+        author = row.select_one("td:nth-child(2) a")
+        posts.append(
+            {
+                "title": link["title"],
+                "url": link["href"],
+                "reply_count": int(r_count) if r_count else 0,
+                "time": datetime.strptime(time_text, "%Y-%m-%d %H:%M"),
+                "author": {"name": author.get_text(), "url": author["href"]},
             }
-        })
+        )
     return posts
 
 
@@ -42,19 +41,16 @@ def parse_detail(html):
     """
     soup = BeautifulSoup(html, "html.parser")
     title = soup.h1.get_text(strip=True)
-    content = soup.find("div", class_='topic-richtext').get_text("\n", True)
-    author = soup.select_one('#topic-content h3 a')
-    create_time = soup.select_one('#topic-content h3 span.create-time').get_text()
+    content = soup.find("div", class_="topic-richtext").get_text("\n", True)
+    author = soup.select_one("#topic-content h3 a")
+    create_time = soup.select_one("#topic-content h3 span.create-time").get_text()
     rent = extract_rent(title + "\n" + content)
     return {
         "title": title,
         "rent": rent,
-        "create_time": datetime.strptime(create_time, '%Y-%m-%d %H:%M:%S'),
+        "create_time": datetime.strptime(create_time, "%Y-%m-%d %H:%M:%S"),
         "content": content,
-        "author": {
-            "name": author.get_text(),
-            "url": author['href']
-        }
+        "author": {"name": author.get_text(), "url": author["href"]},
     }
 
 
