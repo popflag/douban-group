@@ -2,6 +2,7 @@ import logging
 import random
 import sys
 import time
+from typing import Optional
 
 import requests
 
@@ -10,7 +11,7 @@ from config import GROUP_LIST, HEADERS, REQUEST_INTERVAL
 from parse import parse_list, parse_detail
 
 
-def __get(url):
+def __get(url: str) -> Optional[str]:
     response = requests.get(url, headers=HEADERS)
     html = response.text
     if response.ok:
@@ -31,7 +32,7 @@ def __get(url):
     sys.exit()
 
 
-def crawl_list(group_id, start_time, start=None):
+def crawl_list(group_id, start_time, start=None) -> Optional[list]:
     """获取帖子列表
     :param group_id: 小组ID
     :param start_time: 监控帖子的起始时间

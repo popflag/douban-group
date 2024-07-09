@@ -1,6 +1,6 @@
 import unittest
 
-from parse import parse_list, parse_detail, extract_rent
+from src.parse import parse_list, parse_detail, extract_rent
 
 
 class TestParse(unittest.TestCase):

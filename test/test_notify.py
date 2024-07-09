@@ -1,8 +1,7 @@
 import datetime
-import re
 import unittest
 
-from notify import meet_condition, send_msg
+from src.notify import meet_condition, send_msg
 
 
 class TestNotify(unittest.TestCase):

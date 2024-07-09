@@ -1,7 +1,7 @@
 import datetime
 import unittest
 
-from crawler import crawl_list, crawl_detail
+from src.crawler import crawl_list, crawl_detail
 
 
 class TestCrawler(unittest.TestCase):

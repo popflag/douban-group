@@ -2,11 +2,12 @@ import json
 import logging
 import re
 from datetime import datetime
+from typing import Any
 
 from bs4 import BeautifulSoup
 
 
-def parse_list(html):
+def parse_list(html) -> list[dict[str, Any]]:
     """
     解析帖子列表
     """
@@ -35,7 +36,7 @@ def parse_list(html):
     return posts
 
 
-def parse_detail(html):
+def parse_detail(html: str) -> dict[str, Any]:
     """
     解析帖子详情
     """
@@ -54,7 +55,7 @@ def parse_detail(html):
     }
 
 
-def extract_rent(text):
+def extract_rent(text: str) -> int:
     """
     从文本中提取租金
     """
@@ -68,3 +69,4 @@ def extract_rent(text):
             continue
         return int(match.group(2))
     logging.warning("租金提取失败\n%s", text)
+    return 0
